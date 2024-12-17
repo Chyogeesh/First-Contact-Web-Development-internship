@@ -1,0 +1,39 @@
+// Backend Code for User Registration
+
+import wixUsers from 'wix-users';
+import wixData from 'wix-data';
+import wixEmail from 'wix-email';
+
+// Function to register the user and send verification email
+export async function registerUser(email, password, username) {
+    // Check if the email already exists in the database
+    const existingUser = await wixData.query("Users").eq("email", email).find();
+
+    if (existingUser.items.length > 0) {
+        throw new Error("An account with this email already exists.");
+    }
+
+    // Register the user with Wix Users API
+    try {
+        const user = await wixUsers.register(email, password, { contactInfo: { "username": username } });
+
+        // After successful registration, send verification email
+        await sendVerificationEmail(email);
+
+        return user;
+    } catch (error) {
+        throw new Error("Error during registration: " + error.message);
+    }
+}
+
+// Function to send a verification email
+async function sendVerificationEmail(email) {
+    const verificationLink = wixUsers.getEmailVerificationLink(email);
+    
+    // Send the verification email
+    await wixEmail.send({
+        to: email,
+        subject: "Please verify your email address",
+        body: `Click the following link to verify your email address: ${verificationLink}`
+    });
+}
