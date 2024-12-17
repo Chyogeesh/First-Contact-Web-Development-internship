@@ -83,3 +83,37 @@ Rate Limiting: To prevent brute-force attacks, there is likely rate-limiting imp
 Data Encryption: Sensitive data, including user credentials, is encrypted both during transmission (via HTTPS) and when stored in the database.
 Conclusion
 The signup process on a Wix platform with Velo customizations involves a seamless integration of front-end user interaction and back-end processing. Wix Velo's APIs facilitate user authentication, data validation, session management, and email verification, ensuring a smooth and secure signup experience. By leveraging APIs like wix-users, wix-data, and wix-email, the process is both user-friendly and secure, providing a robust system for managing user registration on a Wix-powered website.
+3. Wix Data Collections (User Data Storage)
+The backend code interacts with the wix-data API to store user-related information in a database. The Users collection stores email, username, and other data relevant to the user. You can create this collection in the Wix database manually.
+
+Go to Wix Dashboard → Database → Add New Collection and name it Users.
+Add fields such as:
+email (Text)
+username (Text)
+password (Text, optional, since password will be handled by Wix Users API)
+signupDate (Date)
+4. Email Verification Logic
+Wix handles the email verification automatically when the user clicks the link in the confirmation email. However, you can customize the email content or add further processing in the backend.
+
+The backend code above sends the verification link after user registration via the wixEmail.send() API.
+Users are expected to verify their email before they can fully access the site.
+5. Handling Errors and Edge Cases
+The script includes error handling to address the following cases:
+
+Duplicate emails: When the user attempts to sign up with an email that's already registered.
+Empty fields: The frontend ensures that all required fields are filled before submission.
+Email validation: The frontend checks the format of the email.
+6. Optional: Display Success/Error Messages with Lightboxes
+The frontend uses wixWindow.openLightbox() to display success or error messages as lightboxes to users. These messages could include things like:
+
+Registration successful: A message thanking the user for registering and asking them to check their email for verification.
+Error messages: Such as "Email already in use" or "Invalid email format."
+Conclusion
+This signup process leverages Wix Velo’s APIs such as wix-users for registration and authentication, wix-data for database interaction, and wix-email for sending verification emails. The frontend handles form validation and interacts with the backend to ensure a smooth signup flow. By leveraging the powerful features of Wix Velo, you can build a fully customized, secure signup system for your Wix website.
+
+Links to Wix Velo APIs:
+
+Wix Users API Documentation
+Wix Data API Documentation
+Wix Email API Documentation
+Wix Window API Documentation
